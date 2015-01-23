@@ -87,7 +87,8 @@ module ActiveShipping
       'ground_customer_reference' => 'GROUND_CUSTOMER_REFERENCE',
       'ground_po' => 'GROUND_PO',
       'express_reference' => 'EXPRESS_REFERENCE',
-      'express_mps_master' => 'EXPRESS_MPS_MASTER'
+      'express_mps_master' => 'EXPRESS_MPS_MASTER',
+      'shipper_reference' => 'SHIPPER_REFERENCE'
     }
 
     TRANSIT_TIMES = %w(UNKNOWN ONE_DAY TWO_DAYS THREE_DAYS FOUR_DAYS FIVE_DAYS SIX_DAYS SEVEN_DAYS EIGHT_DAYS NINE_DAYS TEN_DAYS ELEVEN_DAYS TWELVE_DAYS THIRTEEN_DAYS FOURTEEN_DAYS FIFTEEN_DAYS SIXTEEN_DAYS SEVENTEEN_DAYS EIGHTEEN_DAYS)
@@ -301,6 +302,11 @@ module ActiveShipping
           package_node << XmlNode.new('Value', tracking_number)
           package_node << XmlNode.new('Type', PACKAGE_IDENTIFIER_TYPES[options['package_identifier_type'] || 'tracking_number'])
         end
+
+
+        # Needed for shipper_reference, but does not seem to cause any
+        # issues when included for other types.
+        root_node << XmlNode.new('ShipmentAccountNumber', @options[:account])
 
         root_node << XmlNode.new('ShipDateRangeBegin', options['ship_date_range_begin']) if options['ship_date_range_begin']
         root_node << XmlNode.new('ShipDateRangeEnd', options['ship_date_range_end']) if options['ship_date_range_end']
